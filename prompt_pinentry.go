@@ -12,7 +12,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/twpayne/go-pinentry-minimal/pinentry"
+	pinentry "github.com/twpayne/go-pinentry/v4"
 )
 
 func getPIN(serial uint32, retries int) (string, error) {
@@ -32,6 +32,6 @@ func getPIN(serial uint32, retries int) (string, error) {
 	}
 	defer client.Close()
 
-	pin, _, err := client.GetPIN()
-	return pin, err
+	pin, err := client.GetPIN()
+	return pin.PIN, err
 }
