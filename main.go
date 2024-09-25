@@ -31,7 +31,7 @@ import (
 	"github.com/go-piv/piv-go/piv"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 func main() {
@@ -75,7 +75,7 @@ func main() {
 }
 
 func runAgent(socketPath string) {
-	if terminal.IsTerminal(int(os.Stdin.Fd())) {
+	if term.IsTerminal(int(os.Stdin.Fd())) {
 		log.Println("Warning: yubikey-agent is meant to run as a background daemon.")
 		log.Println("Running multiple instances is likely to lead to conflicts.")
 		log.Println("Consider using the launchd or systemd services.")
@@ -328,9 +328,9 @@ func (a *Agent) SignWithFlags(key ssh.PublicKey, data []byte, flags agent.Signat
 		alg := key.Type()
 		switch {
 		case alg == ssh.KeyAlgoRSA && flags&agent.SignatureFlagRsaSha256 != 0:
-			alg = ssh.SigAlgoRSASHA2256
+			alg = ssh.KeyAlgoRSASHA256
 		case alg == ssh.KeyAlgoRSA && flags&agent.SignatureFlagRsaSha512 != 0:
-			alg = ssh.SigAlgoRSASHA2512
+			alg = ssh.KeyAlgoRSASHA512
 		}
 		// TODO: maybe retry if the PIN is not correct?
 		return s.(ssh.AlgorithmSigner).SignWithAlgorithm(rand.Reader, data, alg)

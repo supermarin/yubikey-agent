@@ -100,8 +100,8 @@ func runSetup(yk *piv.YubiKey) {
 	fmt.Println("")
 	fmt.Println("🧪 Reticulating splines...")
 
-	var key [24]byte
-	if _, err := rand.Read(key[:]); err != nil {
+	var key = make([]byte, 24)
+	if _, err := rand.Read(key); err != nil {
 		log.Fatal(err)
 	}
 	if err := yk.SetManagementKey(piv.DefaultManagementKey, key); err != nil {
